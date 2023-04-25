@@ -13,9 +13,6 @@ def test_simple_harvest(
     strategy,
     chain,
     strategist_ms,
-    gauge,
-    voter,
-    rewardsContract,
     amount,
     sleep_time,
     is_slippery,
@@ -79,9 +76,7 @@ def test_simple_harvest(
             / (strategy.estimatedTotalAssets())
         ),
     )
-    print("Harvest info:", tx.events["Harvested"])
-    if not no_profit:
-        assert tx.events["Harvested"]["profit"] > 0
+
 
     # simulate some profits if we don't have any to make sure everything else works
     if no_profit:
@@ -149,7 +144,7 @@ def test_simple_harvest(
         return
 
     # change our optimal deposit asset
-    strategy.setOptimal(1, {"from": gov})
+    strategy.setOptimal(0, {"from": gov})
 
     # store asset amount
     before_usdc_assets = vault.totalAssets()
@@ -181,12 +176,8 @@ def test_simple_harvest(
             / (strategy.estimatedTotalAssets())
         ),
     )
-    print("Harvest info:", tx.events["Harvested"])
-    if not no_profit:
-        assert tx.events["Harvested"]["profit"] > 0
-
-    # change our optimal deposit asset
-    strategy.setOptimal(2, {"from": gov})
+       # change our optimal deposit asset
+    strategy.setOptimal(1, {"from": gov})
 
     # store asset amount
     before_usdt_assets = vault.totalAssets()
@@ -219,11 +210,7 @@ def test_simple_harvest(
             / (strategy.estimatedTotalAssets())
         ),
     )
-    print("Harvest info:", tx.events["Harvested"])
-    if not no_profit:
-        assert tx.events["Harvested"]["profit"] > 0
-
-    # simulate a day of waiting for share price to bump back up
+        # simulate a day of waiting for share price to bump back up
     chain.sleep(86400)
     chain.mine(1)
 

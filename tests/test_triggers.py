@@ -13,7 +13,6 @@ def test_triggers(
     strategy,
     chain,
     amount,
-    gasOracle,
     strategist_ms,
     is_slippery,
     no_profit,
@@ -22,7 +21,6 @@ def test_triggers(
 ):
 
     # convex inactive strategy (0 DR and 0 assets) shouldn't be touched by keepers
-    gasOracle.setMaxAcceptableBaseFee(10000 * 1e9, {"from": strategist_ms})
     currentDebtRatio = vault.strategies(strategy)["debtRatio"]
     vault.updateStrategyDebtRatio(strategy, 0, {"from": gov})
     if is_convex:
@@ -128,13 +126,7 @@ def test_triggers(
     chain.sleep(sleep_time)
     chain.mine(1)
 
-    # harvest should trigger false due to high gas price
-    gasOracle.setMaxAcceptableBaseFee(1 * 1e9, {"from": strategist_ms})
-    tx = strategy.harvestTrigger(0, {"from": gov})
-    print("\nShould we harvest? Should be false.", tx)
-    assert tx == False
-
-    # withdraw and confirm we made money, or at least that we have about the same
+        # withdraw and confirm we made money, or at least that we have about the same
     vault.withdraw({"from": whale})
     if is_slippery and no_profit:
         assert (

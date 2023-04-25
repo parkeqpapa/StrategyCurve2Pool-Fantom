@@ -14,11 +14,8 @@ def test_cloning(
     rewards,
     chain,
     contract_name,
-    rewardsContract,
     pid,
     amount,
-    pool,
-    gauge,
     strategy_name,
     sleep_time,
     tests_using_tenderly,
@@ -29,7 +26,6 @@ def test_cloning(
     has_rewards,
     rewards_token,
     is_clonable,
-    proxy,
 ):
 
     # skip this test if we don't clone
